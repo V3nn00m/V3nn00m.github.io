@@ -14,35 +14,31 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Chirpy # the main title
+title: 0X_V3n0m 🕷️ # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the subtitle
+tagline: Bug Hunter | Reverse Engineer # it will display as the subtitle
 
-description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+description: >-
+  Bug bounty and reverse engineering insights — writeups, tools, and tutorials by a passionate security researcher.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://V3nn00m.github.io"
 
 github:
-  username: github_username # change to your GitHub username
+  username: V3nn00m # change to your GitHub username
 
-twitter:
-  username: twitter_username # change to your Twitter username
+witter:
+  username: 0X_V3N0M # change to your Twitter username
 
 social:
-  # Change to your full name.
-  # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: your_full_name
-  email: example@domain.com # change to your email address
+  name: 0X_V3n0m
+  email: am4781616@gmail.com
   links:
-    # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
-    # Uncomment below to add more social links
-    # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://twitter.com/0X_V3N0M
+    - https://github.com/v3n00m13
+    - https://www.facebook.com/0XAhmedAllah
+    - https://www.linkedin.com/in/ahmed-allah-mohamed-53a60b232
 
 # Site Verification Settings
 webmaster_verifications:
@@ -98,7 +94,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar:
+avatar: https://scontent.fcai30-1.fna.fbcdn.net/v/t39.30808-6/509427157_3149795268512125_8936631829215774748_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ZyTG_I9o8wUQ7kNvwEej0qA&_nc_oc=AdmhOoChIsZwwTSRM2gJ_3qfWCBiOIFOyH9dfWifQkftaJxTmiEkIEC0-up9Ulxlilc&_nc_zt=23&_nc_ht=scontent.fcai30-1.fna&_nc_gid=sq3d1ox09_3xE7lUEwb7rw&oh=00_AfdFW6bC0boM5qDw4NvvmvvaDubH3jSxREj63vlGdFAWYw&oe=68EEC26A
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
