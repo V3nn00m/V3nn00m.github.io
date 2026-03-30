@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import { siteConfig } from "../../../config";
 import { getTagUrl } from "@/utils/url-utils";
 import type { SeriesItem } from "@utils/content-utils";
+import Image from "../../atoms/Image/Image.astro";
 
 interface Props {
 	series: SeriesItem;
@@ -141,11 +142,10 @@ const coverWidth = "28%";
 						class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl"
 					/>
 				</div>
-				<img
+				<Image
 					src={series.image}
 					alt={`Cover for ${series.title}`}
-					class="w-full h-full object-cover"
-					loading="lazy"
+					class="w-full h-full"
 				/>
 			</a>
 		)
