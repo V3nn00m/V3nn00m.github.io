@@ -1,0 +1,41 @@
+---
+import Pagination from "@components/control/Pagination.astro";
+import CategoryBar from "@components/features/posts/CategoryBar.astro";
+import PostPage from "@components/features/posts/PostPage.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import type { GetStaticPaths } from "astro";
+
+import { siteConfig } from "../config";
+import { PAGE_SIZE } from "../constants/constants";
+import { getSortedPostsWithSeries } from "../utils/content-utils";
+import { initPostIdMap } from "../utils/permalink-utils";
+
+const showCategoryBar = siteConfig.postListLayout.categoryBar?.enable ?? false;
+
+export const getStaticPaths = (async ({ paginate }) => {
+	// We still need getSortedPosts for permalink init (all posts, not collapsed)
+	const { getSortedPosts } = await import("../utils/content-utils");
+	const allBlogPosts = await getSortedPosts();
+	initPostIdMap(allBlogPosts);
+
+	// Now get the collapsed list (series as single items)
+	const listItems = await getSortedPostsWithSeries();
+	return paginate(listItems, { pageSize: PAGE_SIZE });
+}) satisfies GetStaticPaths;
+
+// https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
+
+const { page } = Astro.props;
+
+const len = page.data.length;
+---
+
+<MainGridLayout>
+	{showCategoryBar && <CategoryBar />}
+	<PostPage page={page} />
+	<Pagination
+		class="mx-auto onload-animation"
+		page={page}
+		style={`animation-delay: calc(var(--content-delay) + ${len * 50}ms)`}
+	/>
+</MainGridLayout>

@@ -1,0 +1,178 @@
+---
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "../../../config";
+import { getTagUrl } from "@/utils/url-utils";
+import type { SeriesItem } from "@utils/content-utils";
+
+interface Props {
+	series: SeriesItem;
+	class?: string;
+	style?: string;
+}
+
+const { series, style }: Props = Astro.props;
+const className = Astro.props.class;
+
+const url = `/series/${series.id}/`;
+const hasCover =
+	series.image !== undefined && series.image !== null && series.image !== "";
+const coverWidth = "28%";
+---
+
+<div
+	class:list={[
+		"card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative",
+		className,
+	]}
+	style={style}
+>
+	<div
+		class:list={[
+			"pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative",
+			{
+				"w-full md:w-[calc(100%_-_3.25rem_-_0.75rem)]": !hasCover,
+				"w-full md:w-[calc(100%_-_var(--coverWidth)_-_0.75rem)]": hasCover,
+			},
+		]}
+	>
+		<!-- Series badge -->
+		<div class="flex items-center gap-2 mb-2">
+			<span
+				class="inline-flex items-center gap-1 text-[0.7rem] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-[var(--primary)]/15 text-[var(--primary)]"
+			>
+				<Icon
+					name="material-symbols:auto-stories"
+					class="text-sm"
+				/>
+				Series &middot; {series.postCount} parts
+			</span>
+		</div>
+
+		<!-- Title -->
+		<a
+			href={url}
+			class="transition group w-full block font-bold mb-3 text-3xl text-90
+        hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+        active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
+        before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+        before:absolute
+        before:top-[3.5rem] before:left-[1.125rem] before:hidden md:before:block"
+		>
+			{series.title}
+			<Icon
+				class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute"
+				name="material-symbols:chevron-right-rounded"
+			/>
+			<Icon
+				class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0"
+				name="material-symbols:chevron-right-rounded"
+			/>
+		</a>
+
+		<!-- Date -->
+		<div class="flex items-center gap-1 text-sm text-50 mb-4">
+			<Icon
+				name="material-symbols:calendar-today-outline-rounded"
+				class="text-base"
+			/>
+			<span>
+				Last updated:
+				{
+					series.latestPublished.toLocaleDateString("en-US", {
+						year: "numeric",
+						month: "short",
+						day: "numeric",
+					})
+				}
+			</span>
+		</div>
+
+		<!-- Description -->
+		{
+			series.description && (
+				<div class="transition text-75 mb-3.5 pr-4 line-clamp-2">
+					{series.description}
+				</div>
+			)
+		}
+
+		<!-- Tags -->
+		<div class="flex flex-wrap gap-2 mt-2">
+			{
+				series.tags && series.tags.length > 0 ? (
+					series.tags.slice(0, 4).map((tag) => (
+						<a
+							href={getTagUrl(tag)}
+							class:list={[
+								siteConfig.tagStyle?.useNewStyle
+									? "link-lg transition text-50 text-xs font-medium px-2 py-1 rounded-lg hover:text-[var(--primary)] dark:hover:text-[var(--primary)] active:text-[var(--primary)] dark:active:text-[var(--primary)] group/tag whitespace-nowrap"
+									: "btn-regular h-6 text-xs px-2 rounded-lg",
+							]}
+							aria-label={`View all posts tagged with ${tag.trim()}`}
+						>
+							<span class="transition-transform group-hover/tag:translate-x-0.5">
+								# {tag.trim()}
+							</span>
+						</a>
+					))
+				) : (
+					<span class="text-xs text-50">No tags</span>
+				)
+			}
+		</div>
+	</div>
+
+	<!-- Cover image -->
+	{
+		hasCover && (
+			<a
+				href={url}
+				aria-label={series.title}
+				class:list={[
+					"group",
+					"max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0",
+					"md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95",
+				]}
+			>
+				<div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition" />
+				<div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
+					<Icon
+						name="material-symbols:chevron-right-rounded"
+						class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl"
+					/>
+				</div>
+				<img
+					src={series.image}
+					alt={`Cover for ${series.title}`}
+					class="w-full h-full object-cover"
+					loading="lazy"
+				/>
+			</a>
+		)
+	}
+
+	<!-- No cover: enter button -->
+	{
+		!hasCover && (
+			<a
+				href={url}
+				aria-label={series.title}
+				class="!hidden md:!flex btn-regular w-[3.25rem]
+         absolute right-3 top-3 bottom-3 rounded-xl bg-[var(--enter-btn-bg)]
+         hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95
+        "
+			>
+				<Icon
+					name="material-symbols:chevron-right-rounded"
+					class="transition text-[var(--primary)] text-4xl mx-auto"
+				/>
+			</a>
+		)
+	}
+</div>
+<div
+	class="transition border-t-[1px] border-dashed mx-6 border-black/10 dark:border-white/[0.15] last:border-t-0 md:hidden"
+>
+</div>
+
+<style define:vars={{ coverWidth }}></style>

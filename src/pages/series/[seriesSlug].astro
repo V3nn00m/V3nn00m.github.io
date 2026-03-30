@@ -1,0 +1,166 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+import { getPostUrl, getFileDirFromPath } from "@utils/url-utils";
+import type { GetStaticPaths } from "astro";
+import ImageWrapper from "@components/atoms/Image/Image.astro";
+
+export const getStaticPaths = (async () => {
+	const allPosts = await getCollection("posts", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
+
+	// Find all unique series slugs
+	const seriesSlugs = [
+		...new Set(
+			allPosts
+				.filter((p) => p.data.series)
+				.map((p) => p.data.series as string),
+		),
+	];
+
+	return seriesSlugs.map((slug) => {
+		// Posts for this series, sorted by seriesOrder
+		const posts = allPosts
+			.filter((p) => p.data.series === slug)
+			.sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+
+		// Get series meta from the highest-order post
+		const metaPost = [...posts].sort(
+			(a, b) => (b.data.seriesOrder ?? 0) - (a.data.seriesOrder ?? 0),
+		)[0];
+
+		return {
+			params: { seriesSlug: slug },
+			props: {
+				posts,
+				title: metaPost.data.seriesTitle || slug,
+				description: metaPost.data.seriesDescription || "",
+				image: metaPost.data.seriesImage || metaPost.data.image || "",
+				basePath: getFileDirFromPath(metaPost.filePath || ""),
+			},
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { posts, title, description, image, basePath } = Astro.props;
+---
+
+<MainGridLayout title={title} description={description}>
+	<script>
+		import("../../scripts/right-sidebar-layout.js");
+	</script>
+
+	<div
+		class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32"
+	>
+		<div class="card-base z-10 px-6 sm:px-9 py-8 relative w-full">
+
+			<!-- Series Hero Header -->
+			<div class="flex flex-col md:flex-row gap-6 mb-8">
+				{
+					image && (
+						<div class="flex-shrink-0 relative w-full md:w-48 h-48 rounded-2xl shadow-lg border border-black/10 dark:border-white/10 overflow-hidden">
+							<ImageWrapper
+								src={image}
+								basePath={basePath}
+								alt={title}
+								class="w-full h-full object-cover"
+								widths={[400]}
+								sizes="400px"
+							/>
+						</div>
+					)
+				}
+				<div class="flex-1 min-w-0 flex flex-col justify-center">
+					<!-- Series badge -->
+					<div class="mb-2">
+						<span
+							class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-[var(--primary)]/15 text-[var(--primary)]"
+						>
+							<Icon name="material-symbols:auto-stories" class="text-sm" />
+							Series &middot; {posts.length} parts
+						</span>
+					</div>
+
+					<h1 class="text-3xl font-bold text-90 mb-2">{title}</h1>
+
+					{
+						description && (
+							<p class="text-black/60 dark:text-white/60 text-base leading-relaxed">
+								{description}
+							</p>
+						)
+					}
+				</div>
+			</div>
+
+			<!-- Divider -->
+			<div
+				class="h-px bg-gradient-to-r from-[var(--primary)]/40 via-[var(--primary)]/15 to-transparent mb-6"
+			>
+			</div>
+
+			<!-- Episodes List -->
+			<div class="space-y-2">
+				{
+					posts.map((post, idx) => {
+						const url = getPostUrl(post);
+						return (
+							<a
+								href={url}
+								class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 py-3.5 rounded-xl transition-all hover:bg-[var(--primary)]/8 hover:pl-5"
+							>
+								<!-- Order Number & Image wrapper -->
+								<div class="flex items-center gap-4 w-full sm:w-auto">
+									<span class="flex-shrink-0 w-9 h-9 rounded-xl bg-[var(--primary)]/12 text-[var(--primary)] text-sm font-bold flex items-center justify-center mt-0.5 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+										{post.data.seriesOrder ?? idx + 1}
+									</span>
+
+									{post.data.image && (
+										<div class="flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden border border-black/5 dark:border-white/5">
+											<ImageWrapper
+												src={post.data.image}
+												basePath={getFileDirFromPath(post.filePath || "")}
+												alt={post.data.title}
+												class="w-full h-full object-cover"
+												widths={[200]}
+												sizes="200px"
+											/>
+										</div>
+									)}
+								</div>
+
+								<!-- Post Info -->
+								<div class="flex-1 min-w-0">
+									<p class="font-semibold text-black/85 dark:text-white/85 group-hover:text-[var(--primary)] transition-colors leading-snug">
+										{post.data.title}
+									</p>
+									{post.data.description && (
+										<p class="text-sm text-black/45 dark:text-white/45 mt-0.5 line-clamp-1">
+											{post.data.description}
+										</p>
+									)}
+									<p class="text-xs text-black/35 dark:text-white/35 mt-1">
+										{new Date(post.data.published).toLocaleDateString("en-US", {
+											year: "numeric",
+											month: "short",
+											day: "numeric",
+										})}
+									</p>
+								</div>
+
+								<!-- Arrow -->
+								<Icon
+									name="material-symbols:arrow-forward-rounded"
+									class="flex-shrink-0 text-black/20 dark:text-white/20 group-hover:text-[var(--primary)] transition-all mt-2 translate-x-0 group-hover:translate-x-1"
+								/>
+							</a>
+						);
+					})
+				}
+			</div>
+		</div>
+	</div>
+</MainGridLayout>

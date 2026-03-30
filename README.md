@@ -1,43 +1,46 @@
-# Chirpy Starter
+# 🕷️ 0xV3n0m — Personal Blog
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+> *"Every binary hides a story — you just need to read it backwards."* 🧠
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+A personal cybersecurity blog by **0xV3n0m** — documenting the journey through **Reverse Engineering**, **Bug Hunting**, and low-level systems exploration. Built with [Astro](https://astro.build) using the [Mizuki](https://github.com/matsuzaka-yuki/Mizuki) theme.
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+[![Astro](https://img.shields.io/badge/Astro-6.0-orange?logo=astro)](https://astro.build/)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
+[![pnpm](https://img.shields.io/badge/pnpm-10-blue?logo=pnpm)](https://pnpm.io/)
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
+🌐 **Live Site:** [V3nn00m.github.io](https://V3nn00m.github.io/)
 
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
-```
+---
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
 
-## Usage
+### 🔬 Reverse Engineering for Beginners (Re4B)
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+An in-depth, chapter-by-chapter walkthrough of [*Reverse Engineering for Beginners*](https://beginners.re/) by Dennis Yurichev. Each post covers compiler output analysis across **x86/x64**, **ARM**, and **MIPS** architectures with hands-on debugging sessions using **x32dbg**, **IDA**, and **GDB**.
 
-## Contributing
+## 🛠️ Tech Stack
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+| Layer | Technology |
+|:------|:-----------|
+| Framework | [Astro](https://astro.build) 6.0 |
+| Styling | [Tailwind CSS](https://tailwindcss.com) 4.0 |
+| Theme | [Mizuki](https://github.com/matsuzaka-yuki/Mizuki) |
+| Code Blocks | [Expressive Code](https://expressive-code.com/) |
+| Math | [KaTeX](https://katex.org/) |
+| Search | [Pagefind](https://pagefind.app/) |
+| Transitions | [Swup](https://swup.js.org/) |
+| Package Manager | [pnpm](https://pnpm.io/) |
 
-## License
+---
 
-This work is published under [MIT][mit] License.
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+## 🔗 Connect
+
+- 🐦 [Twitter / X](https://twitter.com/0X_V3N0M)
+- 💼 [LinkedIn](https://www.linkedin.com/in/ahmed-allah-mohemd-53a60b232/)
+- ✍️ [Medium](https://0xv3n0m.medium.com/)
+- 🐙 [GitHub](https://github.com/V3nn00m)
+- 💬 [Discord](https://discord.com/users/0x_v3n0m)
+- 📧 [Email](mailto:am4781616@gmail.com)
+
+---
+

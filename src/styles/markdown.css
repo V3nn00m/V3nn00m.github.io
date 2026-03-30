@@ -1,0 +1,354 @@
+@reference "tailwindcss";
+
+.custom-md {
+  h1 {
+    @apply text-3xl;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    .anchor {
+      @apply transition -m-0.5 ms-[0.2ch] p-0.5 select-none opacity-0 no-underline;
+
+      .anchor-icon {
+        @apply mx-[0.45ch];
+      }
+    }
+
+    &:hover .anchor {
+      @apply opacity-100;
+    }
+  }
+
+  /* --- 链接 --- */
+  a:not(.no-styling) {
+    @apply relative bg-none font-medium text-(--primary)
+        underline decoration-(--link-underline) decoration-1 decoration-dashed underline-offset-4;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+
+    &:hover,
+    &:active {
+      @apply decoration-transparent;
+      background: var(--btn-plain-bg-hover);
+      border-bottom: 1px dashed var(--link-hover);
+      text-decoration: none;
+    }
+  }
+
+  /* --- 代码块 --- */
+  code {
+    @apply bg-(--inline-code-bg) text-(--inline-code-color) px-1 py-0.5 rounded-md overflow-hidden;
+
+    font-family: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    &:before,
+    &:after {
+      content: none;
+    }
+
+    counter-reset: line;
+    span.line {
+      &:before {
+        @apply text-white/25 mr-4 w-4 inline-block select-none;
+        content: counter(line);
+        counter-increment: line;
+        direction: rtl;
+      }
+      &:last-child:empty,
+      &:last-child:has(> span:empty:only-child) {
+        display: none;
+      }
+    }
+  }
+
+  /* --- 列表 --- */
+  ul,
+  ol {
+    li::marker {
+      @apply text-(--primary);
+    }
+  }
+
+  /* --- 引用块 --- */
+  blockquote {
+    @apply not-italic border-transparent relative;
+    font-weight: inherit;
+
+    &:before {
+      @apply content-[''] absolute left-0 block transition bg-(--btn-regular-bg) h-full w-1 rounded-full;
+    }
+
+    p:before,
+    p:after {
+      @apply content-none;
+    }
+  }
+
+  /* --- 表格样式 --- */
+  .table-wrapper {
+    @apply w-full overflow-x-auto m-0 rounded-(--radius-large);
+    -webkit-overflow-scrolling: touch;
+
+    /* --- 滚动条样式 --- */
+    &::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 0 calc(var(--radius-large) + 2px);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-bg);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-bg-hover);
+    }
+    &::-webkit-scrollbar-thumb:active {
+      background: var(--scrollbar-bg-active);
+    }
+  }
+
+  table {
+    @apply w-full border-separate m-0 bg-(--card-bg);
+    border-spacing: 0;
+
+    border: 1px solid var(--line-divider);
+    border-radius: var(--radius-large);
+
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    @apply px-4 py-3 whitespace-nowrap;
+    border-bottom: 1px solid var(--line-divider);
+    border-right: 1px solid var(--line-divider);
+    transition: none;
+  }
+
+  th {
+    background-color: var(--btn-regular-bg);
+    color: var(--btn-content);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+  th:last-child,
+  td:last-child {
+    border-right: none;
+  }
+
+  tr:nth-child(even) {
+    background-color: var(--codeblock-bg);
+  }
+  tr:hover td {
+    background-color: var(--btn-plain-bg-hover);
+    transition: none;
+  }
+
+  /* --- 数学公式样式 --- */
+  .katex-display {
+    @apply w-full overflow-x-auto overflow-y-hidden box-border my-4;
+    padding-bottom: 6px;
+    padding-top: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-bg);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-bg-hover);
+    }
+    &::-webkit-scrollbar-thumb:active {
+      background: var(--scrollbar-bg-active);
+    }
+  }
+
+  .katex-display > .katex {
+    display: block;
+    width: fit-content;
+    min-width: calc(100% - 2px);
+  }
+
+  .katex-display > .katex:has(.tag) > .katex-html {
+    display: block;
+    padding-right: 3rem;
+    box-sizing: border-box;
+  }
+}
+
+/* 外部覆盖样式 */
+.custom-md .expressive-code :is(ul, ol) li::marker {
+  @apply text-inherit;
+}
+
+:root:not(.dark) .custom-md spoiler {
+  --_spoiler-mask: color-mix(in oklch, var(--primary) 55%, white 45%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   📦 Custom Code Block Component (.code-box)
+   Used in HTML-based code blocks within markdown posts.
+   Overrides inline styles to integrate with the blog's theme system.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.custom-md .code-box {
+  position: relative;
+  border: 1px solid var(--line-divider) !important;
+  border-radius: var(--radius-large) !important;
+  overflow: hidden !important;
+  background: var(--codeblock-bg) !important;
+  font-family: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  margin: 1.25rem 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Subtle hover glow matching the blog's primary color */
+.custom-md .code-box:hover {
+  border-color: oklch(0.70 0.08 var(--hue)) !important;
+  box-shadow: 0 0 0 1px oklch(0.70 0.08 var(--hue) / 0.15),
+              0 4px 16px -4px oklch(0.70 0.08 var(--hue) / 0.1);
+}
+
+/* Language badge via data-lang attribute */
+.custom-md .code-box[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--btn-content);
+  background: var(--codeblock-topbar-bg);
+  border-bottom-left-radius: calc(var(--radius-large) - 2px);
+  border-top-right-radius: calc(var(--radius-large) - 2px);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  font-family: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.custom-md .code-box:hover[data-lang]::before {
+  opacity: 1;
+}
+
+/* Pre element inside code-box — ensure no clipping */
+.custom-md .code-box pre {
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  padding-top: 1rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  color: var(--btn-content) !important;
+  background: transparent !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* When there's a language label, add top padding so code doesn't overlap */
+.custom-md .code-box[data-lang] pre {
+  padding-top: 1.5rem !important;
+}
+
+/* Code element inside code-box */
+.custom-md .code-box code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  display: block;
+  min-width: fit-content;
+}
+
+/* Override prose/tailwind styles that might add unwanted styling */
+.custom-md .code-box code::before,
+.custom-md .code-box code::after {
+  content: none !important;
+}
+
+/* Scrollbar styling for code-box */
+.custom-md .code-box pre::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-md .code-box pre::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 0 0.5rem;
+}
+
+.custom-md .code-box pre::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-bg);
+  border-radius: 4px;
+}
+
+.custom-md .code-box pre::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-bg-hover);
+}
+
+.custom-md .code-box pre::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-bg-active);
+}
+
+/* Firefox scrollbar */
+.custom-md .code-box pre {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-bg) transparent;
+}
+
+/* Light mode adjustments */
+:root:not(.dark) .custom-md .code-box {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+:root:not(.dark) .custom-md .code-box pre {
+  color: oklch(0.35 0.02 var(--hue)) !important;
+}
+
+/* Dark mode adjustments */
+:root.dark .custom-md .code-box pre {
+  color: oklch(0.85 0.02 var(--hue)) !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .custom-md .code-box {
+    border-radius: 0.75rem !important;
+    margin: 1rem -0.5rem;
+  }
+
+  .custom-md .code-box pre {
+    font-size: 0.8rem !important;
+    padding: 0.875rem 1rem !important;
+  }
+
+  .custom-md .code-box[data-lang] pre {
+    padding-top: 1.25rem !important;
+  }
+
+  .custom-md .code-box[data-lang]::before {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
