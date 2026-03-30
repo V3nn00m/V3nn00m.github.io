@@ -5,7 +5,7 @@ description: "Continuing the exploration of the floating-point unit covering SSE
 author: "0xV3n0m"
 category: "Re4B"
 tags: ["Reverse Engineering", "Books", "Assembly"]
-image: "/src/content/assets/img/reversee26.jpg"
+image: "/assets/img/reversee26.jpg"
 draft: false
 lang: "eng"
 
@@ -15,7 +15,7 @@ series: "re4b"
 seriesOrder: 26
 seriesTitle: "Reverse Engineering for Beginners"
 seriesDescription: "A beginner-friendly book covering x86/x64 reverse engineering through real compiler output and code patterns."
-seriesImage: "/src/content/assets/img/RE4B.png"
+seriesImage: "/assets/img/RE4B.png"
 ---
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -160,11 +160,11 @@ And these instructions modify the CPU flags directly (ZF / PF / CF).
 <p>
 This is how the C3/C2/C0 bits are positioned in the AX register.
 </p>
-<img src="/src/content/assets/img/a_1.jpg" alt="1" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/a_1.jpg" alt="1" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 This is how the C3/C2/C0 bits are positioned in the AH register.
 </p>
-<img src="/src/content/assets/img/a_2.jpg" alt="2" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/a_2.jpg" alt="2" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 After executing the instruction:
 </p>
@@ -234,35 +234,35 @@ cl /Od /Zi /arch:IA32 test.c  ; compile with no optimization, debug info, target
 <p>
 Then we will run the exe on x32dbg, go to <code style="color:chartreuse;">symbols</code>, and select the function named <code style="color:chartreuse;">d_max</code>.
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_1.png" alt="fpu_1" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_1.png" alt="fpu_1" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 We will set a breakpoint at the beginning of the function, press F9 until we reach it, and then start stepping with F8.
 </p>
 <p>
 We will start executing the first <code style="color:chartreuse;">FLD</code>:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_2.png" alt="fpu_2" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_2.png" alt="fpu_2" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 The current function arguments are: a = 1.2 and b = 3.4 (we can see them in the stack: two pairs of 32-bit values). The value b (3.4) is already loaded in <code style="color:chartreuse;">ST(0)</code>. Now <code style="color:chartreuse;">FCOMP</code> is about to execute. x32dbg displays the second operand of <code style="color:chartreuse;">FCOMP</code>, which is currently on the stack.
 </p>
 <p>
 FCOMP was executed:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_3.png" alt="fpu_3" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_3.png" alt="fpu_3" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 We see the state of the FPU condition flags: all zeros.
 </p>
 <p>
 FNSTSW was executed:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_4.png" alt="fpu_4" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_4.png" alt="fpu_4" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 We see that register AX contains zeros: indeed all condition flags are zero. (OllyDbg decodes <code style="color:chartreuse;">FNSTSW</code> as <code style="color:chartreuse;">FSTSW</code> — they are synonyms).
 </p>
 <p>
 TEST was executed:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_5.png" alt="fpu_5" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_5.png" alt="fpu_5" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 The PF flag is set to 1. Indeed: the number of set bits in 0 is 0, and 0 is an even number. x32dbg decodes <code style="color:chartreuse;">JP</code> as <code style="color:chartreuse;">JPE</code> — they are synonyms. And it is about to execute now.
 </p>
@@ -277,35 +277,35 @@ JPE executed, and FLD loaded the value b (3.4) into <code style="color:chartreus
 <p>
 Let's do a second example:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_6.png" alt="fpu_6" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_6.png" alt="fpu_6" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 The current function arguments are: a = 5.6 and b = −4. The value b (−4) is already loaded in <code style="color:chartreuse;">ST(0)</code>. <code style="color:chartreuse;">FCOMP</code> is about to execute now. x32dbg displays the second operand of <code style="color:chartreuse;">FCOMP</code>, which is currently on the stack.
 </p>
 <p>
 Then we will execute FCOMP:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_7.png" alt="fpu_7" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_7.png" alt="fpu_7" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 We see the state of the FPU condition flags: all zeros except C0.
 </p>
 <p>
 Then FNSTSW will execute:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_8.png" alt="fpu_8" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_8.png" alt="fpu_8" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 We see that register AX contains <b style="color:cornflowerblue;">0x100</b>: the C0 flag is present in bit number 8.
 </p>
 <p>
 Then we will execute JP:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_9.png" alt="fpu_9" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_9.png" alt="fpu_9" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 Here you will find that the PF flag is zeroed. Indeed: the number of set bits in <b style="color:cornflowerblue;">0x100</b> is 1, and 1 is an odd number.
 </p>
 <p>
 JPE is now skipped (does not execute). And since JPE did not execute, FLD loaded the value a (5.6) into <code style="color:chartreuse;">ST(0)</code>:
 </p>
-<img src="/src/content/assets/x32dbg2/fpu_10.png" alt="fpu_10" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/x32dbg2/fpu_10.png" alt="fpu_10" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 After that the function finishes.
 </p>
@@ -514,11 +514,11 @@ The <code style="color:chartreuse;">FCOM</code> instruction raises an exception 
 <p>
 The next instruction is <code style="color:chartreuse;">SAHF (Store AH into Flags)</code> — and this is a rare instruction in code that is not related to the FPU. 8 bits from AH are transferred to the first 8 bits of the CPU flags in the following order:
 </p>
-<img src="/src/content/assets/img/fpu_sahf_1.jpeg" alt="SAHF flags mapping" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/fpu_sahf_1.jpeg" alt="SAHF flags mapping" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 Let's recall that <code style="color:chartreuse;">FNSTSW</code> transfers the bits that matter to us (C3 / C2 / C0) into AH:
 </p>
-<img src="/src/content/assets/img/fpu_sahf_2.jpeg" alt="FNSTSW C3/C2/C0 in AH" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/fpu_sahf_2.jpeg" alt="FNSTSW C3/C2/C0 in AH" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 And they are located at positions <b style="color:cornflowerblue;">6, 2, and 0</b> in register AH.
 </p>
@@ -751,11 +751,11 @@ ZF
 <p>
 Let's recall where the C3 / C2 / C0 bits are located in register AH after executing <code style="color:chartreuse;">FSTSW / FNSTSW</code>:
 </p>
-<img src="/src/content/assets/img/fpu_ah_bits_1.jpeg" alt="C3/C2/C0 in AH" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/fpu_ah_bits_1.jpeg" alt="C3/C2/C0 in AH" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 Let's also recall how the bits from AH are stored into CPU flags after executing <code style="color:chartreuse;">SAHF</code>:
 </p>
-<img src="/src/content/assets/img/fpu_ah_bits_2.jpeg" alt="SAHF AH to CPU flags" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/fpu_ah_bits_2.jpeg" alt="SAHF AH to CPU flags" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
 <p>
 After the comparison, the C3 and C0 bits are transferred into:
 </p>
