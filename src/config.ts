@@ -27,7 +27,19 @@ export const siteConfig: SiteConfig = {
 	title: "0X_V3n0m 🕷️",
 	subtitle: "",
 	description:
-		"CTF Writeups, Reverse Engineering, & Bug Bounty insights by 0X_V3n0m 🕷️",
+		"Explore CTF Writeups,  Reverse Engineering tutorials, and real-world Bug Bounty insights by 0X_V3n0m.",
+	keywords: [
+		"Cybersecurity",
+		"CTF Writeups",
+		"Reverse Engineering",
+		"Bug Bounty",
+		"0X_V3n0m",
+		"Hacking Tutorials",
+		"InfoSec",
+		"Malware Analysis",
+		"V3nn00m",
+		"Ahmed Allah Mohemd",
+	],
 	siteURL: "https://V3nn00m.github.io/", // 请替换为你的站点URL，以斜杠结尾
 	siteStartDate: "2026-03-29", // 站点开始运行日期，用于站点统计组件计算运行天数
 
@@ -236,8 +248,9 @@ export const siteConfig: SiteConfig = {
 	},
 
 	thirdPartyAnalytics: {
-		enable: false, // 是否启用第三方统计（Microsoft Clarity），默认关闭，启用可能影响 Lighthouse 评分
+		enable: true, // 是否启用第三方统计（Microsoft Clarity / Google Analytics），默认关闭，启用可能影响 Lighthouse 评分
 		clarityId: "", // Clarity 项目 ID
+		googleAnalyticsId: "G-8B5N4GZYC1", // Google Analytics 测量 ID (例如 G-XXXXXXXXXX)
 	},
 };
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
@@ -275,22 +288,39 @@ export const navBarConfig: NavBarConfig = {
 			icon: "material-symbols:link",
 			children: [
 				{
-					name: "GitHub",
-					url: "https://github.com/V3nn00m",
-					external: true,
-					icon: "fa7-brands:github",
-				},
-				{
-					name: "linkedin",
-					url: "https://www.linkedin.com/in/ahmed-allah-mohemd-53a60b232/",
-					external: true,
-					icon: "fa7-brands:linkedin",
-				},
-				{
 					name: "medium",
-					url: "https://0xv3n0m.medium.com/",
-					external: true,
 					icon: "fa7-brands:medium",
+					url: "https://0xv3n0m.medium.com/",
+				},
+				{
+					name: "twitter",
+					icon: "fa7-brands:twitter",
+					url: "https://twitter.com/0xV3n0m",
+				},
+				{
+					name: "Linkedin",
+					icon: "fa7-brands:linkedin",
+					url: "https://www.linkedin.com/in/ahmed-allah-mohemd-53a60b232/",
+				},
+				{
+					name: "GitHub",
+					icon: "fa7-brands:github",
+					url: "https://github.com/V3nn00m",
+				},
+				{
+					name: "email",
+					icon: "fa7-solid:envelope",
+					url: "mailto:am4781616@gmail.com",
+				},
+				{
+					name: "Discord",
+					icon: "fa7-brands:discord",
+					url: "https://discord.com/users/0x_v3n0m",
+				},
+				{
+					name: "Facebook",
+					icon: "fa7-brands:facebook",
+					url: "https://www.facebook.com/OxVenom/",
 				},
 			],
 		},
@@ -347,6 +377,11 @@ export const profileConfig: ProfileConfig = {
 			name: "Discord",
 			icon: "fa7-brands:discord",
 			url: "https://discord.com/users/0x_v3n0m",
+		},
+		{
+			name: "Facebook",
+			icon: "fa7-brands:facebook",
+			url: "https://www.facebook.com/OxVenom/",
 		},
 	],
 };

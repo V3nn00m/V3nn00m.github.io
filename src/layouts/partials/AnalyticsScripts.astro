@@ -15,16 +15,19 @@ interface Props {
 	thirdPartyAnalytics?: {
 		enable: boolean;
 		clarityId?: string;
+		googleAnalyticsId?: string;
 	};
 }
 
 const {
 	gtmId = "GTM-KRX3XGVH",
-	thirdPartyAnalytics = { enable: false, clarityId: "" },
+	thirdPartyAnalytics = { enable: false, clarityId: "", googleAnalyticsId: "" },
 } = Astro.props;
 
 const clarityEnable =
 	thirdPartyAnalytics.enable && thirdPartyAnalytics.clarityId;
+const gaEnable =
+	thirdPartyAnalytics.enable && thirdPartyAnalytics.googleAnalyticsId;
 ---
 
 <!-- 第三方分析脚本 - 仅在用户交互后延迟加载 -->
@@ -34,6 +37,8 @@ const clarityEnable =
 		gtmId,
 		clarityEnable,
 		clarityId: thirdPartyAnalytics.clarityId || "",
+		gaEnable,
+		gaId: thirdPartyAnalytics.googleAnalyticsId || "",
 	}}
 >
 	(function () {
@@ -59,6 +64,20 @@ const clarityEnable =
 				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i;
 				f.parentNode.insertBefore(j, f);
 			})(window, document, "script", "dataLayer", gtmId);
+
+			// Google Analytics (仅在启用且配置了 ID 时加载)
+			if (gaEnable && gaId) {
+				const gaScript = d.createElement("script");
+				gaScript.async = true;
+				gaScript.src = "https://www.googletagmanager.com/gtag/js?id=" + gaId;
+				d.head.appendChild(gaScript);
+
+				w.dataLayer = w.dataLayer || [];
+				function gtag(){w.dataLayer.push(arguments);}
+				w.gtag = gtag;
+				gtag("js", new Date());
+				gtag("config", gaId);
+			}
 
 			// Clarity (仅在启用时加载)
 			if (clarityEnable && clarityId) {

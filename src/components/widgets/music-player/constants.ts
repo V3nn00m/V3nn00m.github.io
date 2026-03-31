@@ -7,10 +7,18 @@ export const DEFAULT_VOLUME = 0.7;
 export const LOCAL_PLAYLIST: Song[] = [
 	{
 		id: 1,
-		title: "Elr7man",
-		artist: "",
+		title: "Surah Al-Rahman",
+		artist: "محمود جمال - MAHMOOD GAMAL",
 		cover: "assets/music/cover/quran.webp",
 		url: "assets/music/url/elr7man.mp3",
+		duration: 0,
+	},
+	{
+		id: 2,
+		title: "Surah Al-Mulk",
+		artist: "محمود جمال - MAHMOOD GAMAL",
+		cover: "assets/music/cover/quran.webp",
+		url: "assets/music/url/Al-molk.mp3",
 		duration: 0,
 	},
 ];

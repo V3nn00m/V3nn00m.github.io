@@ -533,7 +533,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 			<div class="w-4/5 lg:w-3/4 text-center mb-0">
 				<div class="flex flex-col">
 					{overlayTitle && (
-						<h1 class="banner-title text-6xl lg:text-8xl text-white drop-shadow-lg mb-2 lg:mb-4">
+						<h1 class="banner-title text-6xl lg:text-8xl mb-2 lg:mb-4" data-text={overlayTitle}>
 							{overlayTitle}
 						</h1>
 					)}
@@ -648,18 +648,36 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 </div>
 
 <style>
-	/* Banner 文本样式 */
+	@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+	/* 
+		Hacker / Matrix Glitch Effect for Banner Title 
+	*/
 	.banner-title {
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-		animation: fadeInUp 1s ease-out;
-		font-weight: bold;
+		font-family: 'SDGlitchDemo', 'Share Tech Mono', monospace;
+		color: #e2b3ff; /* موف فاتح ومريح جداً للعين */
+		-webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.9); /* إطار أسود ناعم ومحدد */
+		text-shadow: 
+			2px 2px 4px rgba(0, 0, 0, 0.8), /* ظل أسود خلف الكلمة يفصلها عن الخلفية الموف */
+			0 0 10px rgba(0, 0, 0, 0.6), /* عزل أسود خفيف وراها */
+			0 0 20px rgba(176, 38, 255, 0.4); /* توهج موف هادي وناعم جداً */
+		position: relative;
+		animation: fadeInUp 1s ease-out forwards, floating-title 3.5s 1s ease-in-out infinite alternate;
+		letter-spacing: 2px; /* مسافة بسيطة بين الحروف تريح العين */
+	}
+
+	@keyframes floating-title {
+		0% { transform: translateY(0px); filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
+		100% { transform: translateY(-12px); filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.5)); }
 	}
 
 	.banner-subtitle {
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+		text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0,0,0,0.5); /* عزل الأسود عشان السابتايتل يبان */
 		animation: fadeInUp 1s ease-out 0.3s both;
 		min-height: 1.5em;
 		line-height: 1.2;
+		color: #f5e6ff;
+		font-family: 'SDGlitchDemo', 'Share Tech Mono', monospace; 
 	}
 
 	@keyframes fadeInUp {
