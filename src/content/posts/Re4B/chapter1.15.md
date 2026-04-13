@@ -20,60 +20,36 @@ seriesImage: "/assets/img/RE4B.png"
 
 <div style="line-height:1.9; font-size:21px; direction:ltr;">
 <h1 style="color:#9a3ba6;"><b>1.15 More about results returning</b></h1>
-<img src="/assets/img/resultsreturning.png" alt="resultsreturning" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/resultsreturning.png" alt="resultsreturning" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;" />
 <p>
 The author said that in x86, the result of function execution is usually returned in the <code style="color: chartreuse;"> EAX </code> register. If the type is <b style = "color: cornflowerblue;">byte</b> or <b style = "color: cornflowerblue;">char</b>, the lower part of the <code style="color: chartreuse;"> EAX </code> register which is <code style="color: chartreuse;">AL</code> is used. If the function returns a <b style = "color: cornflowerblue;">float</b> number, the <code style="color: chartreuse;">FPU register ST(0)</code> is used. In ARM, the result is usually returned in the<code style="color: chartreuse;"> R0</code> register.
 </p>
 <h2 style="color:#3ba2a6;"><b>1.15.1 Attempt to use the result of a function returning void</b></h2>
-<img src="/assets/img/returningvoid.png" alt="returningvoid" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/returningvoid.png" alt="returningvoid" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;" />
 <p>
 Well, what happens if the return value of <code style="color: chartreuse;">main()</code> was <b style = "color: cornflowerblue;">void</b> not <b style = "color: cornflowerblue;">int</b>?
 </p>
 <p>
 The so-called <b style = "color: cornflowerblue;">startup-code</b> calls main() approximately like this:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="nasm" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">nasm</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```nasm
 push envp ; push the environment pointer onto the stack
 push argv ; push the argument vector onto the stack
 push argc ; push the argument count onto the stack
 call main ; call the main function
 push eax ; push the return value from main (in EAX) onto the stack
 call exit ; call the exit function with the pushed value
-</code>
-  </pre>
-</div>
+```
+
 <p>
 In other words
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="C" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">C</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```c
 exit(main(argc, argv, envp)); // call exit with the return value of main as argument
-</code>
-  </pre>
-</div>
+```
+
 <p>
 If you wrote <code style="color: chartreuse;">void main()</code> instead of <code style="color: chartreuse;">int main()</code>, what happens?
 </p>
@@ -84,46 +60,23 @@ If you wrote <code style="color: chartreuse;">void main()</code> instead of <cod
 <p>
 We can illustrate this with code like this:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="C" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">C</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
-#include &lt;stdio.h&gt; // include standard I/O header
+
+```c
+#include <stdio.h> // include standard I/O header
 void main() // main function declared as void, no return value
 {
     printf("Hello, world!\\n"); // print "Hello, world!" followed by newline
 };
-</code>
-  </pre>
-</div>
+```
+
 <p>
 GCC here might replace printf with puts.
 </p>
 <ul>
 <li><code style="color: chartreuse;">puts()</code> returns the number of characters it printed in <code style="color: chartreuse;">EAX</code>. If main didn't return a value, <code style="color: chartreuse;">EAX</code> will retain this value.</li>
 </ul>
-<!-- Code Block -->
-<div class="code-box" data-lang="nasm" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">nasm</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```nasm
 .LC0: // label for the string
 .string "Hello, world!" // define the string "Hello, world!"
 main: // start of main function
@@ -135,41 +88,29 @@ main: // start of main function
       call puts // call puts to print the string
       leave // restore base and stack pointers
       ret // return from function
-</code>
-  </pre>
-</div>
+```
+
 <p>
 We write a bash script that displays the exit status:
 </p>
 <p>Listing 1.101: tst.sh</p>
-<!-- Code Block -->
-<div class="code-box" data-lang="bash" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">bash</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```bash
 #!/bin/sh // shebang for shell script
 ./hello_world // run the hello_world executable
 echo $? // echo the exit status of the previous command
-</code>
-  </pre>
-</div>
+```
+
 <p>
 And we run it:
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 $ tst.sh
 Hello, world!
 14
+```
 
-</pre>
 <p>
 14 is the number of characters that were printed.
 </p>
@@ -179,19 +120,8 @@ The number of characters leaked from <code style="color: chartreuse;">printf()</
 <p>
 By the way, when we decompile C++ with Hex-Rays, sometimes we encounter a function that ends with a class destructor:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="nasm" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">nasm</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```nasm
 ...
 call ??1CString@@QAE@XZ ; CString::CString(void) // call the CString destructor
 mov ecx, [esp+30h+var_C] // move value from stack to ECX
@@ -200,36 +130,23 @@ pop ebx // pop EBX from stack
 mov large fs:0, ecx // move ECX to FS:0 (thread information block)
 add esp, 28h // add 28h to ESP (clean stack)
 retn // return from function
-</code>
-  </pre>
-</div>
+```
+
 <p>
 According to the C++ standard, the destructor does not return anything, but when Hex-Rays does not know that, and thinks that the destructor and the function itself return int, we see something like this in the outputs:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="C" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">C</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```c
 ...
 return CString::~CString(&Str); // Hex-Rays mistakenly shows destructor as returning value
 }
-</code>
-  </pre>
-</div>
+```
+
 <p>
 In a clearer sense, it is that when Hex-Rays saw retn, it said that surely this Function returns a Value even though in reality this is just a return to the Caller, nothing more.
 </p>
 <h2 style="color:#3ba2a6;"><b>1.15.3 Returning a structure</b></h2>
-<img src="/assets/img/Returningastructure.png" alt="Returningastructure" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/Returningastructure.png" alt="Returningastructure" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;" />
 
 <p>
 The author then explained and said the truth is that the return value is computed in the EAX register.
@@ -255,19 +172,8 @@ Meaning it is the same idea as if you send a pointer in the first argument by ha
 <p>
 A small example:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="C" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">C</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```c
 struct s { // define structure s
     int a; // field a
     int b; // field b
@@ -282,25 +188,13 @@ struct s get_some_values(int a) // function that returns struct s
     rt.c = a+3; // set rt.c to a+3
     return rt; // return the struct
 };
-</code>
-  </pre>
-</div>
+```
+
 <p>
 What we got (MSVC 2010 /Ox):
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="Assembly" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">Assembly</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```assembly
 $T3853 = 8 ; size = 4 // temporary variable for struct pointer
 _a$ = 12 ; size = 4 // parameter a
 ?get_some_values@@YA?AUs@@H@Z PROC ; get_some_values // start of function
@@ -314,28 +208,16 @@ mov DWORD PTR [eax+4], edx // store a+2 in struct.b
 mov DWORD PTR [eax+8], ecx // store a+3 in struct.c
 ret 0 // return
 ?get_some_values@@YA?AUs@@H@Z ENDP ; get_some_values // end of function
-</code>
-  </pre>
-</div>
+```
+
 <p>
 The micro that the compiler uses here to pass the pointer to the struct is named $T3853.
 </p>
 <p>
 We can write the same example using C99:
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="C" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">C</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```c
 struct s { // define structure s
     int a; // field a
     int b; // field b
@@ -346,25 +228,13 @@ struct s get_some_values(int a) // function that returns struct s
 {
     return (struct s){.a=a+1, .b=a+2, .c=a+3}; // return initialized struct
 };
-</code>
-  </pre>
-</div>
+```
+
 <ul>
 <li>GCC 4.8.1:</li>
 </ul>
-<!-- Code Block -->
-<div class="code-box" data-lang="Assembly" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">Assembly</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```assembly
 _get_some_values proc near // start of function
 ptr_to_struct = dword ptr 4 // pointer to struct parameter
 a = dword ptr 8 // parameter a
@@ -378,9 +248,8 @@ mov [eax+4], ecx // store a+2 in struct.b
 mov [eax+8], edx // store a+3 in struct.c
 retn // return
 _get_some_values endp // end of function
-</code>
-  </pre>
-</div>
+```
+
 <p>
 As we see, the function fills the fields of the struct that was allocated before by the calling function, as if a pointer to the struct was sent as an argument.
 </p>
@@ -393,31 +262,20 @@ To make this part easier for you, I'll explain with a simple explanation that cl
 <p>
 First, this is the big instruct will be in this shape for example
 </p>
-<!-- Code Block -->
-<div class="code-box" data-lang="nasm" style="border:1px solid #30363d;border-radius:8px;overflow:hidden;background:#0d1117;font-family:Consolas, monospace;">
-  <div style="background:#161b22;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;">
-    <div style="display:flex;gap:6px;">
-      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f56;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e;"></span>
-      <span style="width:12px;height:12px;border-radius:50%;background:#27c93f;"></span>
-    </div>
-    <span style="font-size:0.9rem;color:#8b949e;">nasm</span>
-    <button onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText);this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000);" style="background:#21262d;border:1px solid #30363d;color:#8b949e;font-size:0.8rem;padding:3px 8px;border-radius:6px;cursor:pointer;">Copy</button>
-  </div>
-  <pre style="margin:0;padding:1rem;font-size:15px;line-height:1.6;overflow-x:auto;color:#c9d1d9;">
-<code>
+
+```nasm
 struct s { // define structure s
    int a; // field a
    int b; // field b
    int c; // field c
 };
-</code>
-  </pre>
-</div>
+```
+
 <p>
 This will be its shape in memory
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 ┌─────────┐
 │   a     │
 ├─────────┤
@@ -425,34 +283,40 @@ This will be its shape in memory
 ├─────────┤
 │   c     │
 └─────────┘
-</pre>
+```
+
 <p>
 The caller now before calling the function get_some_values(a)
 </p>
 <p>
 He does this, allocates a place for the struct in memory like this
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 Caller Memory:
 ┌──────────────────────────┐
 │  Empty space to save struct   │  ← It will be returned here
 │ Address = 5000            │
 └──────────────────────────┘
-</pre>
+```
+
 <p>
 And after that sends the address of this place to the function as a hidden argument
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 Caller
    │
    │  sends pointer = 5000
    ▼
 Callee (get_some_values)
-</pre>
+```
+
 <p>
 At that time the function receives a pointer to an empty place and starts writing the values inside it
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 Address 5000:
 ┌─────────┐
 │  a=a+1  │
@@ -461,11 +325,13 @@ Address 5000:
 ├─────────┤
 │  c=a+3  │
 └─────────┘
-</pre>
+```
+
 <p>
 And this is the final shape
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 Caller memory:
 ┌────────────────────────────┐
 │ struct at 5000:            │
@@ -476,23 +342,26 @@ Caller memory:
               ↑
               │
    callee wrote the values here
-</pre>
+```
+
 <p>
 After now the function finishes, the function does not return the struct directly, she returns the pointer that you originally sent (hidden)
 </p>
 <p>
 So the caller sees the full struct appeared to him:
 </p>
-<pre style="padding:1rem;background:#0d1117;color:#c9d1d9;border-radius:8px;">
+
+```text
 return value ← same address 5000
 
 Caller now sees:
 a = a+1
 b = a+2
 c = a+3
-</pre>
+```
+
 <p>
 And this is a summary for all this talk
 </p>
-<img src="/assets/img/flowchart.png" alt="flowchart" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;">
+<img src="/assets/img/flowchart.png" alt="flowchart" style="display:block; margin:20px auto; border-radius:12px; max-width:80%;" />
 </div>

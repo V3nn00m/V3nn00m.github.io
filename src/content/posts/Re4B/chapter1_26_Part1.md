@@ -1,5 +1,5 @@
 ---
-title: "CH1.24 - Arrays (Part 1)"
+title: "CH1.26(part1) Arrays"
 published: 2026-03-18
 description: "Exploring how compilers represent and access arrays in x86/x64 assembly and the memory layout behind single and multi-dimensional arrays"
 author: "0xV3n0m"
