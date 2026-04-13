@@ -313,7 +313,7 @@ const jsonLd = {
 						description={entry.data.description}
 						pubDate={formatDateToYYYYMMDD(entry.data.published)}
 						coverImage={posterCoverUrl}
-						url={Astro.url.toString()}
+						url={new URL(Astro.url.pathname, siteConfig.siteURL).toString()}
 						siteTitle={siteConfig.title}
 						avatar={posterAvatarUrl}
 					/>

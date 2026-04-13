@@ -3,7 +3,7 @@ import svelte, { vitePreprocess } from "@astrojs/svelte";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import swup from "@swup/astro";
-import tailwindcss from "@tailwindcss/vite";
+import _tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
@@ -74,6 +74,21 @@ export default defineConfig({
 				pluginLanguageBadge(),
 				pluginCustomCopyButton(),
 			],
+			// Map non-standard language names to known shiki language IDs
+			shiki: {
+				langAlias: {
+					assembly: "asm",
+					nasm: "asm",
+					"language-nasm": "asm",
+					"c/c++": "cpp",
+					terminal: "bash",
+					hex: "text",
+					ascii: "text",
+					stack: "text",
+					compiler: "text",
+					output: "text",
+				},
+			},
 			defaultProps: {
 				wrap: true,
 				overridesByLang: {
@@ -176,7 +191,42 @@ export default defineConfig({
 		],
 	},
 	vite: {
-		plugins: [tailwindcss()],
+		plugins: [
+			// Wrap tailwindcss() to exclude Svelte virtual CSS modules.
+			// Without this, @tailwindcss/vite tries to parse Svelte <script>
+			// content as CSS, causing "Invalid declaration" errors.
+			..._tailwindcss().map((plugin) => {
+				if (!plugin || typeof plugin !== 'object' || !('transform' in plugin)) return plugin;
+				const originalTransform = plugin.transform;
+				// Vite hooks can be a plain function OR { handler, order, enforce }
+				const isObjectHook = typeof originalTransform === 'object' && originalTransform !== null && 'handler' in originalTransform;
+				const transformFn = isObjectHook ? originalTransform.handler : originalTransform;
+				const wrapped = function(code, id, options) {
+					// Skip Svelte virtual CSS modules (e.g. *.svelte?svelte&type=style&lang.css)
+					if (id.includes('?svelte') || id.includes('.svelte?')) return null;
+					return transformFn.call(this, code, id, options);
+				};
+				return {
+					...plugin,
+					transform: isObjectHook
+						? { ...originalTransform, handler: wrapped }
+						: wrapped,
+				};
+			}),
+		],
+		server: {
+			// Increase timeout for large CSS processing in dev mode
+			warmup: {
+				clientFiles: [],
+			},
+		},
+		// Increase module runner timeout to 3 minutes to avoid CSS timeout errors
+		runner: {
+			timeout: 180000,
+		},
+		optimizeDeps: {
+			force: false,
+		},
 		build: {
 			// 静态资源处理优化，防止小图片转 base64 导致 HTML 体积过大
 			assetsInlineLimit: 4096,
