@@ -26,6 +26,7 @@ import {
 	initPostIdMap,
 } from "@utils/permalink-utils";
 import { getFileDirFromPath } from "@utils/url-utils";
+import { computeWordCount } from "@utils/word-count";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import { Icon } from "astro-icon/components";
@@ -77,7 +78,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 
-const { remarkPluginFrontmatter } = await render(entry);
+// Compute word count directly from raw body (remarkPluginFrontmatter is unreliable in Astro 6)
+const { words: postWords, minutes: postMinutes } = computeWordCount(entry.body);
 
 // 处理加密逻辑
 let encryptedContent = "";
@@ -148,7 +150,7 @@ const jsonLd = {
 						<Icon name="material-symbols:notes-rounded" />
 					</div>
 					<div class="text-sm">
-						{remarkPluginFrontmatter.words}
+						{postWords}
 						{" " + i18n(I18nKey.wordsCount)}
 					</div>
 				</div>
@@ -161,11 +163,11 @@ const jsonLd = {
 						/>
 					</div>
 					<div class="text-sm">
-						{remarkPluginFrontmatter.minutes}
+						{postMinutes}
 						{
 							" " +
 								i18n(
-									remarkPluginFrontmatter.minutes === 1
+									postMinutes === 1
 										? I18nKey.minuteCount
 										: I18nKey.minutesCount,
 								)

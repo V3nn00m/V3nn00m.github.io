@@ -60,6 +60,20 @@ export function remarkContent() {
 			if (node.type === "text" && node.value) {
 				fullText += node.value + " ";
 			}
+
+			// 从内联 HTML 节点中提取纯文本（去除 HTML 标签）
+			// 这处理了在 markdown 中直接使用 <p>, <b>, <span> 等标签的情况
+			if (node.type === "html" && node.value) {
+				const strippedText = node.value
+					.replace(/<[^>]*>/g, " ")  // 移除所有 HTML 标签
+					.replace(/&[a-zA-Z]+;/g, " ")  // 移除 HTML 实体
+					.replace(/&#\d+;/g, " ")  // 移除数字 HTML 实体
+					.replace(/\s+/g, " ")  // 合并多余空白
+					.trim();
+				if (strippedText.length > 0) {
+					fullText += strippedText + " ";
+				}
+			}
 		});
 
 		// 针对 CJK (中日韩) 字符的字数统计优化
@@ -77,6 +91,15 @@ export function remarkContent() {
 
 		// 估算时间：英文 200词/分，中文 400字/分
 		const minutes = nonCjkStats.words / 200 + cjkCount / 400;
+
+		// --- DEBUG: log word count ---
+		const nodeTypes = {};
+		visit(tree, (node) => {
+			nodeTypes[node.type] = (nodeTypes[node.type] || 0) + 1;
+		});
+		console.log(`[remark-content] Node types:`, JSON.stringify(nodeTypes));
+		console.log(`[remark-content] fullText length: ${fullText.length}, first 200 chars: "${fullText.substring(0, 200)}"`);
+		console.log(`[remark-content] totalWords: ${totalWords}, minutes: ${Math.max(1, Math.round(minutes))}`);
 
 		// --- 注入数据到 Frontmatter ---
 		data.astro.frontmatter.excerpt = excerpt;

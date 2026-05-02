@@ -3,6 +3,7 @@ import { render } from "astro:content";
 import { Icon } from "astro-icon/components";
 
 import { getFileDirFromPath, getPostUrl, getTagUrl } from "@/utils/url-utils";
+import { computeWordCount } from "@/utils/word-count";
 
 import { siteConfig } from "../../../config";
 import I18nKey from "../../../i18n/i18nKey";
@@ -31,7 +32,7 @@ const url = getPostUrl(entry);
 const hasCover = image !== undefined && image !== null && image !== "";
 const coverWidth = "28%";
 
-const { remarkPluginFrontmatter } = await render(entry);
+const { words: postWords, excerpt: postExcerpt } = computeWordCount(entry.body);
 ---
 
 <div
@@ -96,7 +97,7 @@ const { remarkPluginFrontmatter } = await render(entry);
 			hideUpdateDate={true}
 			className="mb-4"
 			showOnlyBasicMeta={true}
-			words={remarkPluginFrontmatter.words}
+			words={postWords}
 			showWordCount={true}
 		/>
 
@@ -106,7 +107,7 @@ const { remarkPluginFrontmatter } = await render(entry);
 				{ "line-clamp-2 md:line-clamp-1": !description },
 			]}
 		>
-			{description || remarkPluginFrontmatter.excerpt}
+			{description || postExcerpt}
 		</div>
 
 		<div class="flex flex-wrap gap-2 mt-2">
