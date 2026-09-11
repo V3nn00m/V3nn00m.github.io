@@ -303,7 +303,7 @@ export const navBarConfig: NavBarConfig = {
 					name: "Linkedin",
 					icon: "fa7-brands:linkedin",
 					external: true,
-					url: "https://www.linkedin.com/in/ahmed-allah-mohemd-53a60b232/",
+					url: "https://www.linkedin.com/in/ahmed-allah-mohamed-53a60b232/",
 				},
 				{
 					name: "GitHub",
@@ -368,7 +368,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "Linkedin",
 			icon: "fa7-brands:linkedin",
-			url: "https://www.linkedin.com/in/ahmed-allah-mohemd-53a60b232/",
+			url: "https://www.linkedin.com/in/ahmed-allah-mohamed-53a60b232/",
 		},
 		{
 			name: "GitHub",
@@ -396,7 +396,7 @@ export const profileConfig: ProfileConfig = {
 export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "0xV3n0m's Personal Blog License",
-	url: "https://linkedin.com/in/ahmed-allah-mohemd-53a60b232/",
+	url: "https://linkedin.com/in/ahmed-allah-mohamed-53a60b232/",
 };
 
 // Permalink 固定链接配置
