@@ -297,7 +297,7 @@ export const navBarConfig: NavBarConfig = {
 					name: "twitter",
 					icon: "fa7-brands:twitter",
 					external: true,
-					url: "https://twitter.com/0xV3n0m",
+					url: "https://x.com/0X_V3N0M",
 				},
 				{
 					name: "Linkedin",
@@ -363,7 +363,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "twitter",
 			icon: "fa7-brands:twitter",
-			url: "https://twitter.com/0xV3n0m",
+			url: "https://x.com/0X_V3N0M",
 		},
 		{
 			name: "Linkedin",
