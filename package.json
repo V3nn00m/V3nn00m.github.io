@@ -22,6 +22,7 @@
 		"format": "prettier --write ./src",
 		"lint": "eslint ./src --fix",
 		"preinstall": "npx only-allow pnpm",
+		"postinstall": "node scripts/patch-vite-timeout.js",
 		"compress-fonts": "node scripts/compress-fonts.js",
 		"test-font-compression": "node scripts/test-font-compression.js",
 		"lhci": "lhci",

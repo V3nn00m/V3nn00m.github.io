@@ -45,7 +45,7 @@ export const siteConfig: SiteConfig = {
 
 	timeZone: SITE_TIMEZONE,
 
-	lang: "en-US", // 站点语言，影响日期格式和部分文本显示。请使用有效的语言代码，例如 'en-US'、'zh-CN'、'ja' 等。
+	lang: "en", // 站点语言，影响日期格式和部分文本显示。请使用有效的语言代码，例如 'en'、'zh_CN'、'ja' 等。
 
 	themeColor: {
 		hue: 320, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
